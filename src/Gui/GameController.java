@@ -1,20 +1,17 @@
 
-package Gui;
-import logic.bricks.OBrick;
-
+package gui;
+import logic.bricks.ZBrick;
 
 public class GameController {
-    
-    
     private final GuiController viewController;
-    private OBrick brick;
     
-    public GameController(GuiController c) {
-        brick =new OBrick();
-		this.viewController = c;
-		//this.viewController.setEventLister(this);
-		//board.createNewBrick();
-		this.viewController.initGameView(brick);
-		//this.viewController.bindScore(board.getScore().scoreProperty());
-	}
+    private ZBrick brick;
+    
+    public GameController(GuiController c)
+    {
+        brick = new ZBrick();
+        this.viewController = c;
+        this.viewController.initGameView(brick);
+        
+    }
 }
