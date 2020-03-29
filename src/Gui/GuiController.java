@@ -51,13 +51,13 @@ public class GuiController {
                 returnPaint=Color.TRANSPARENT;
                 break;
             case 1:
-                returnPaint = Color.AQUA;
+                returnPaint = Color.Color.AQUAMARINE;
                 break;
             case 2:
-                returnPaint = Color.BLUEVIOLET;
+                returnPaint = Color.DARKGREEN;
                 break;
             case 3:
-                returnPaint = Color.DARKGREEN;
+                returnPaint = Color.DARKGRAY;
                 break;
             case 4:
                 returnPaint = Color.YELLOW;
@@ -66,10 +66,10 @@ public class GuiController {
                 returnPaint = Color.RED;
                 break;
             case 6:
-                returnPaint = Color.BEIGE;
+                returnPaint = Color.VIOLET;
                 break;
             case 7:
-                returnPaint = Color.BURLYWOOD;
+                returnPaint = Color.BROWN;
                 break;
             default:
                 returnPaint = Color.WHITE;
