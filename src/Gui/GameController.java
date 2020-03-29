@@ -1,20 +1,19 @@
 
-package gui;
+package Gui;
 
-import logic.bricks.ZBrick;
+import logic.SimpleBoard;
 
 public class GameController {
-
+    private SimpleBoard board = new SimpleBoard(25, 10);
     private final GuiController viewController;
-    
-    private ZBrick brick;
     
     public GameController(GuiController c)
     {
 
-        brick = new ZBrick();
-        this.viewController = c;
-        this.viewController.initGameView(brick);
+       this.viewController = c;
+		//this.viewController.setEventLister(this);
+		board.createNewBrick();
+		this.viewController.initGameView(board.getBoardMatrix(),board.getCurrentShape());
 
         
     }
