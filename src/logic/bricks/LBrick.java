@@ -3,7 +3,7 @@ package logic.bricks;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LBrick {
+public class LBrick implements Brick {
 	
 private final List<int[][]> brickMatrix = new ArrayList<>();
 	
