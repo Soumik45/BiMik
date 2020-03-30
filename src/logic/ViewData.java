@@ -16,10 +16,10 @@ public class ViewData {
 	}
 	
 	
-	/*public int[][] getNextBrickData() {
+	public int[][] getNextBrickData() {
 		return nextBrickData;
 	}
-*/
+
 
 	public int[][] getBrickData() {
 		return brickData;
