@@ -33,15 +33,30 @@ public class SimpleBoard {
 	}
 
 
+		public void moveBrickDown() {
+		Point p = new Point(currentOffset);
+		p.translate(0, 1);
+		currentOffset = p;
+		
+	}
+	
+	  public ViewData getViewData() {
+		return new ViewData(getCurrentShape(),
+				currentOffset.x,
+				currentOffset.y);
+	}
 
-
+	public int[][] getCurrentShape() {
+		return this.brick.getBrickMatrix().get(currentShape);
+	}
+	
 	public int[][] getCurrentShape() {
 		return this.brick.getBrickMatrix().get(currentShape);
 	}
 
 	public void setBrick(Brick brick) {
 		this.brick = brick;
-		//currentOffset = new Point(4, 0);
+		/currentOffset = new Point(4, 0);
 	}
 
 	
