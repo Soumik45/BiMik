@@ -1,20 +1,26 @@
 package Gui;
-
-
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.IntegerProperty;
+
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.effect.Reflection;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 import logic.ViewData;
+
 import logic.events.InputEventListener;
-public class GuiController 
+
+public class GuiController implements Initializable
 {
     
     private static final int BRICK_SIZE = 20;
@@ -26,8 +32,11 @@ public class GuiController
 	private GridPane gamePanel;
     @FXML
 	private GridPane brickPanel;
+	 @FXML
+	private Text scoreValue;
     
-    public void initGameView(int[][] boardMatrix,ViewData viewData) {
+    
+  public void initGameView(int[][] boardMatrix,ViewData viewData) {
 		
 		for (int i = 2; i < boardMatrix.length; i++) {
 			for (int j = 0; j < boardMatrix[i].length; j++) {
@@ -56,11 +65,11 @@ public class GuiController
     brickPanel.setLayoutY(gamePanel.getLayoutY()-42 + viewData.getyPosition() * BRICK_SIZE);
     
     timeLine = new Timeline(new KeyFrame(Duration.millis(400),ae -> moveDown()));
-    timeLine.setCycleCount(Timeline.INDEFINITE);
+    timeLine.setCycleCount(25);
     timeLine.play();
                                 }
     
-    private void moveDown() {
+   private void moveDown() {
 		ViewData viewData = eventLister.onDownEvent();
 		refreshBrick(viewData);
 	}
@@ -73,6 +82,9 @@ public class GuiController
     public void setEventLister(InputEventListener eventLister) {
 		this.eventLister = eventLister;
 	}
+    public void bindScore(IntegerProperty integerProperty) {
+		scoreValue.textProperty().bind(integerProperty.asString());
+	}
     
     public Paint getFillColor(int i) {
 		Paint returnPaint;
@@ -84,7 +96,7 @@ public class GuiController
 			returnPaint = Color.AQUAMARINE;
 			break;
 		case 2:
-			returnPaint = Color.DARKGREEN;
+			returnPaint = Color.PALEGREEN;
 			break;
 		case 3:
 			returnPaint = Color.DARKGRAY;
@@ -99,7 +111,7 @@ public class GuiController
 			returnPaint = Color.VIOLET;
 			break;
 		case 7:
-			returnPaint = Color.BROWN;
+			returnPaint = Color.CORNSILK;
 			break;
 		default:
 			returnPaint = Color.WHITE;
@@ -107,6 +119,16 @@ public class GuiController
 		}
 
 		return returnPaint;
+	}
+	 @Override
+	public void initialize(URL location, ResourceBundle resources) {
+		
+		
+		Reflection reflection = new Reflection();
+		reflection.setFraction(0.8);
+		reflection.setTopOpacity(0.9);
+		reflection.setTopOffset(-12);
+		scoreValue.setEffect(reflection);
 	}
     
 }
