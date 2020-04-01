@@ -1,8 +1,11 @@
-
 package Gui;
+
 import logic.SimpleBoard;
 import logic.ViewData;
+
 import logic.events.InputEventListener;
+
+
 
 public class GameController implements InputEventListener {
     
@@ -18,7 +21,7 @@ public class GameController implements InputEventListener {
 		this.viewController.setEventLister(this);
 		board.createNewBrick();
 		this.viewController.initGameView(board.getBoardMatrix(),board.getViewData());
-		//this.viewController.bindScore(board.getScore().scoreProperty());
+		this.viewController.bindScore(board.getScore().scoreProperty());
 	}
     @Override
     public ViewData onDownEvent() {
