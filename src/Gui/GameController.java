@@ -24,10 +24,16 @@ public class GameController implements InputEventListener {
 		this.viewController.bindScore(board.getScore().scoreProperty());
 	}
     @Override
-    public ViewData onDownEvent() {
-		 board.moveBrickDown();
+  public ViewData onDownEvent() {
+        boolean canMove= board.moveBrickDown();
+                if(!canMove)
+                {
+                    board.mergeBrickToBackground();
+                    board.createNewBrick();
+                }
+                
 		
-		
+		viewController.refreshGameBackground(board.getBoardMatrix());
 		return board.getViewData();
-	}
+    }
 }
