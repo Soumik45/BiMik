@@ -1,14 +1,18 @@
 package Gui;
+import java.awt.event.KeyEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.effect.Reflection;
+import javafx.scene.input.KeyCode;
 
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -17,43 +21,52 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import logic.ViewData;
-
 import logic.events.InputEventListener;
+import logic.events.MoveEvent;
+import logic.events.EventSource;
+import logic.events.EventType1;
+
+
+
 
 public class GuiController implements Initializable
 {
     
     private static final int BRICK_SIZE = 20;
     Timeline timeLine;
+    private Rectangle[][] rectangles;
    private InputEventListener eventLister;
+   private Rectangle[][] displayMatrix;
     
     
     @FXML
 	private GridPane gamePanel;
     @FXML
 	private GridPane brickPanel;
-	 @FXML
+    
+    @FXML
 	private Text scoreValue;
     
-    
-  public void initGameView(int[][] boardMatrix,ViewData viewData) {
-		
+    public void initGameView(int[][] boardMatrix,ViewData viewData) {
+		displayMatrix= new Rectangle[boardMatrix.length][boardMatrix[0].length];
 		for (int i = 2; i < boardMatrix.length; i++) {
 			for (int j = 0; j < boardMatrix[i].length; j++) {
 				Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
 				rectangle.setFill(Color.TRANSPARENT);
                           
-				
+				displayMatrix[i][j] = rectangle;
 				gamePanel.add(rectangle, j, i - 2);
                                                         }
                                             }
- 
+                       rectangles = new Rectangle[viewData.getBrickData().length][viewData.getBrickData()[0].length];
     for(int i=0;i<viewData.getBrickData().length;i++)
     {
         for(int j=0;j<viewData.getBrickData()[i].length;j++)
         {
             Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
 				rectangle.setFill(getFillColor(viewData.getBrickData()[i][j]));
+                                
+                                rectangles[i][j] = rectangle;
                                 brickPanel.add(rectangle, j, i);
                               
                                 
@@ -62,20 +75,37 @@ public class GuiController implements Initializable
         
     }
     brickPanel.setLayoutX(gamePanel.getLayoutX() + viewData.getxPosition() * BRICK_SIZE);
-    brickPanel.setLayoutY(gamePanel.getLayoutY()-42 + viewData.getyPosition() * BRICK_SIZE);
+    brickPanel.setLayoutY(gamePanel.getLayoutY()-42 + (viewData.getyPosition() * BRICK_SIZE)+viewData.getyPosition());
     
-    timeLine = new Timeline(new KeyFrame(Duration.millis(400),ae -> moveDown()));
-    timeLine.setCycleCount(25);
+    timeLine = new Timeline(
+				new KeyFrame(Duration.millis(400), ae -> moveDown()));
+
+    timeLine.setCycleCount(Timeline.INDEFINITE);
     timeLine.play();
+    
+    
                                 }
     
-   private void moveDown() {
+    private void moveDown() {
 		ViewData viewData = eventLister.onDownEvent();
 		refreshBrick(viewData);
 	}
+    public void refreshGameBackground(int[][] board) {
+		for (int i = 2; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				setRectangleData(board[i][j], displayMatrix[i][j]);
+			}
+		}
+	}
     private void refreshBrick(ViewData viewData){
          brickPanel.setLayoutX(gamePanel.getLayoutX() + viewData.getxPosition() * BRICK_SIZE);
-    brickPanel.setLayoutY(gamePanel.getLayoutY()-42 + viewData.getyPosition() * BRICK_SIZE);
+    brickPanel.setLayoutY(gamePanel.getLayoutY()-42 + (viewData.getyPosition() * BRICK_SIZE)+viewData.getyPosition());
+    
+        for (int i = 0; i < viewData.getBrickData().length; i++) {
+			for (int j = 0; j < viewData.getBrickData()[i].length; j++) {
+				setRectangleData(viewData.getBrickData()[i][j], rectangles[i][j]);
+			}
+		}
     
         
     }
@@ -120,16 +150,26 @@ public class GuiController implements Initializable
 
 		return returnPaint;
 	}
-	 @Override
+    @Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		
+		gamePanel.setFocusTraversable(true);
+               gamePanel.requestFocus();
+               
+                       
+                
 		Reflection reflection = new Reflection();
 		reflection.setFraction(0.8);
 		reflection.setTopOpacity(0.9);
 		reflection.setTopOffset(-12);
 		scoreValue.setEffect(reflection);
 	}
-    
-}
 
+    private void setRectangleData(int color, Rectangle rectangle) {
+        rectangle.setFill(getFillColor(color));
+        rectangle.setArcHeight(10);
+		rectangle.setArcWidth(10);
+        
+        
+    }
+}
