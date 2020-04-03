@@ -1,15 +1,18 @@
 package logic.events;
 
-import javafx.event.EventType;
 
 public class MoveEvent {
 	
 	private final EventType eventType;
 	private final EventSource eventSource;
-	public MoveEvent(EventType eventType, EventSource eventSource) {
-		this.eventType = eventType;
+	
+
+   
+
+    public MoveEvent(logic.events.EventType eventType, EventSource eventSource) {
+         this.eventType = eventType;
 		this.eventSource = eventSource;
-	}
+    }
 	
 	public EventType getEventType() {
 		return eventType;
