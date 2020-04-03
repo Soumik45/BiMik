@@ -16,7 +16,7 @@ public class MatrixOperation {
                 int targetX= x+i;
                int  targetY=y+j;
                if (brick[j][i] != 0 &&
-                       (outOfBounds(matrix, targetY) || matrix[targetY][targetX] != 0)) {
+                       (outOfBounds(matrix,targetX, targetY) || matrix[targetY][targetX] != 0)) {
 					return true;
 				}
             }
@@ -59,7 +59,8 @@ public class MatrixOperation {
     
     
     
-    private static boolean outOfBounds(int[][] matrix, int targetY) {
-		return targetY >= matrix.length;
+    private static boolean outOfBounds(int[][] matrix,int targetX, int targetY) {
+		if(targetX>=0&&targetY<matrix.length&& targetX<matrix[targetY].length) return false;
+                else return true;
 	}
 }
