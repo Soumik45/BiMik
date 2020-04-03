@@ -1,14 +1,13 @@
 package Gui;
-import java.awt.event.KeyEvent;
+
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import javafx.event.ActionEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.IntegerProperty;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
-
+//import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.effect.Reflection;
@@ -24,7 +23,11 @@ import logic.ViewData;
 import logic.events.InputEventListener;
 import logic.events.MoveEvent;
 import logic.events.EventSource;
-import logic.events.EventType1;
+import javafx.event.ActionEvent;
+import javafx.scene.input.KeyEvent;
+import logic.events.EventType;
+import logic.events.InputEventListener;
+
 
 
 
@@ -78,7 +81,8 @@ public class GuiController implements Initializable
     brickPanel.setLayoutY(gamePanel.getLayoutY()-42 + (viewData.getyPosition() * BRICK_SIZE)+viewData.getyPosition());
     
     timeLine = new Timeline(
-				new KeyFrame(Duration.millis(400), ae -> moveDown()));
+				new KeyFrame(Duration.millis(400),
+                                      ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))));
 
     timeLine.setCycleCount(Timeline.INDEFINITE);
     timeLine.play();
@@ -86,8 +90,8 @@ public class GuiController implements Initializable
     
                                 }
     
-    private void moveDown() {
-		ViewData viewData = eventLister.onDownEvent();
+    private void moveDown(MoveEvent event) {
+		ViewData viewData = eventLister.onDownEvent(event);
 		refreshBrick(viewData);
 	}
     public void refreshGameBackground(int[][] board) {
@@ -156,8 +160,34 @@ public class GuiController implements Initializable
 		gamePanel.setFocusTraversable(true);
                gamePanel.requestFocus();
                
+                gamePanel.setOnKeyPressed((new EventHandler<KeyEvent>(){
+                    @Override
+                    public void handle(KeyEvent event) {
                        
-                
+                    if(event.getCode()==KeyCode.DOWN|| event.getCode()==KeyCode.S)
+                        
+                    {
+                        moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
+                        event.consume();
+                    }
+                    if(event.getCode()==KeyCode.LEFT|| event.getCode()==KeyCode.A)
+                        
+                    {
+                        //moveDown(new MoveEvent(EventType.LEFT, EventSource.USER));
+                        refreshBrick(eventLister.onLeftEvent());
+                        event.consume();
+                    }
+                    if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.D) {
+						refreshBrick(eventLister.onRightEvent());
+						event.consume();
+					}
+                    
+                    
+                    }
+                    
+                    
+                    
+                }));
 		Reflection reflection = new Reflection();
 		reflection.setFraction(0.8);
 		reflection.setTopOpacity(0.9);
