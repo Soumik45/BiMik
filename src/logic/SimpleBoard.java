@@ -47,6 +47,36 @@ public class SimpleBoard {
 			return true;
 		}
 	}
+	 public boolean moveBrickLeft() {
+            Point p = new Point(currentOffset);
+		p.translate(-1,0);
+                
+                boolean conflict = MatrixOperation.intersects(currentGameMatrix,getCurrentShape(),p.x, p.y) ;
+		if (conflict) {
+                   // System.out.println("Out now");
+                  
+			return false;
+		} else {
+			currentOffset = p;
+			return true;
+		}
+        
+        
+    }
+        public boolean moveBrickRight() {
+         Point p = new Point(currentOffset);
+		p.translate(1,0);
+                
+                boolean conflict = MatrixOperation.intersects(currentGameMatrix,getCurrentShape(),p.x, p.y) ;
+		if (conflict) {
+                   // System.out.println("Out now");
+                  
+			return false;
+		} else {
+			currentOffset = p;
+			return true;
+		}
+    }
 
         public ViewData getViewData() {
 		return new ViewData(getCurrentShape(),
