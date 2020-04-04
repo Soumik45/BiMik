@@ -1,11 +1,16 @@
 package Gui;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 //import javafx.event.EventType;
 import javafx.fxml.FXML;
@@ -24,6 +29,7 @@ import logic.events.InputEventListener;
 import logic.events.MoveEvent;
 import logic.events.EventSource;
 import javafx.event.ActionEvent;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyEvent;
 import logic.events.EventType;
 import logic.events.InputEventListener;
@@ -40,6 +46,7 @@ public class GuiController implements Initializable
     private Rectangle[][] rectangles;
    private InputEventListener eventLister;
    private Rectangle[][] displayMatrix;
+   private BooleanProperty paused = new SimpleBooleanProperty();
     
     
     @FXML
@@ -50,6 +57,11 @@ public class GuiController implements Initializable
     @FXML
 	private Text scoreValue;
     
+     @FXML
+        private GridPane nextBrick;
+    
+     @FXML
+	private ToggleButton pauseButton;
     public void initGameView(int[][] boardMatrix,ViewData viewData) {
 		displayMatrix= new Rectangle[boardMatrix.length][boardMatrix[0].length];
 		for (int i = 2; i < boardMatrix.length; i++) {
@@ -79,7 +91,7 @@ public class GuiController implements Initializable
     }
     brickPanel.setLayoutX(gamePanel.getLayoutX() + viewData.getxPosition() * BRICK_SIZE);
     brickPanel.setLayoutY(gamePanel.getLayoutY()-42 + (viewData.getyPosition() * BRICK_SIZE)+viewData.getyPosition());
-    
+    generatePreviewPanel(viewData.getNextBrickData());
     timeLine = new Timeline(
 				new KeyFrame(Duration.millis(400),
                                       ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))));
@@ -89,6 +101,19 @@ public class GuiController implements Initializable
     
     
                                 }
+    
+    private void generatePreviewPanel(int[][] nextBrickData) {
+		nextBrick.getChildren().clear();
+		for (int i = 0; i < nextBrickData.length; i++) {
+			for (int j = 0; j < nextBrickData[i].length; j++) {
+				Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+				setRectangleData(nextBrickData[i][j], rectangle);
+				if (nextBrickData[i][j] != 0) {
+					nextBrick.add(rectangle, j, i);
+				}
+			}
+		}
+	}
     
     private void moveDown(MoveEvent event) {
 		ViewData viewData = eventLister.onDownEvent(event);
@@ -100,6 +125,7 @@ public class GuiController implements Initializable
 				setRectangleData(board[i][j], displayMatrix[i][j]);
 			}
 		}
+                
 	}
     private void refreshBrick(ViewData viewData){
          brickPanel.setLayoutX(gamePanel.getLayoutX() + viewData.getxPosition() * BRICK_SIZE);
@@ -111,7 +137,7 @@ public class GuiController implements Initializable
 			}
 		}
     
-        
+        generatePreviewPanel(viewData.getNextBrickData());
     }
     public void setEventLister(InputEventListener eventLister) {
 		this.eventLister = eventLister;
@@ -163,8 +189,16 @@ public class GuiController implements Initializable
                 gamePanel.setOnKeyPressed((new EventHandler<KeyEvent>(){
                     @Override
                     public void handle(KeyEvent event) {
-                       
-                    if(event.getCode()==KeyCode.DOWN|| event.getCode()==KeyCode.S)
+                        
+                       if(Objects.equals(paused.getValue(), Boolean.FALSE))
+                       {
+                         if(event.getCode()==KeyCode.UP|| event.getCode()==KeyCode.W)
+                         {
+                             refreshBrick(eventLister.onRotateEvent());
+                             event.consume();
+                         }
+                           
+                           if(event.getCode()==KeyCode.DOWN|| event.getCode()==KeyCode.S)
                         
                     {
                         moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
@@ -181,13 +215,33 @@ public class GuiController implements Initializable
 						refreshBrick(eventLister.onRightEvent());
 						event.consume();
 					}
+                       }
                     
-                    
+                    if (event.getCode() == KeyCode.P) {
+					pauseButton.selectedProperty().setValue(!pauseButton.selectedProperty().getValue());
+				}
                     }
                     
                     
                     
+                    
                 }));
+                pauseButton.selectedProperty().bindBidirectional(paused);
+		pauseButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                       if (newValue) {
+					timeLine.pause();
+					pauseButton.setText("Resume");
+				} else {
+					timeLine.play();
+					pauseButton.setText("Pause");
+				}
+			}
+                    
+
+			
+		});
 		Reflection reflection = new Reflection();
 		reflection.setFraction(0.8);
 		reflection.setTopOpacity(0.9);
