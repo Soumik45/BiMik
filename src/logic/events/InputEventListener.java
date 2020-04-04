@@ -20,6 +20,8 @@ public interface InputEventListener {
     public ViewData onLeftEvent();
 
     public ViewData onRightEvent();
+     public ViewData onRotateEvent();
+   
     
     
 }
