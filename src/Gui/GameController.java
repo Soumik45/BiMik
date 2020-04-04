@@ -1,4 +1,3 @@
-
 package Gui;
 
 import logic.SimpleBoard;
@@ -62,5 +61,12 @@ public class GameController implements InputEventListener {
         board.moveBrickRight();
         return board.getViewData();
         
+    }
+
+    @Override
+    public ViewData onRotateEvent() {
+       board.rotateBrickLeft();
+		
+		return board.getViewData();
     }
 }
