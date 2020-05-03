@@ -1,0 +1,36 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package logic;
+
+/**
+ *
+ * @author Bipul Karmakar
+ */
+public class DownData {
+    
+    private final ClearRow clearRow;
+    private final ViewData viewData;
+    
+    public DownData(ClearRow clearRow, ViewData viewData)
+    {
+        
+        this.clearRow = clearRow;
+        this.viewData = viewData;
+        
+    }
+    
+    public ClearRow getClearRow()
+    {
+        return clearRow;
+    }
+    public ViewData getViewData()
+    {
+        return viewData;
+    }
+    
+    
+    
+}
