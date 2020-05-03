@@ -131,5 +131,12 @@ public class SimpleBoard {
     public void setCurrentShape(int currentShape) {
 		this.currentShape = currentShape;
 	}
+    public ClearRow clearRows()
+    {
+        ClearRow clearRow = MatrixOperation.checkRemoving(currentGameMatrix);
+        currentGameMatrix = clearRow.getNextMatrix();
+        
+        return clearRow;
+    }
 
 }
