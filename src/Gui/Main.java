@@ -1,5 +1,5 @@
+package gui;
 
-package Gui;
 
 
 import java.net.URL;
