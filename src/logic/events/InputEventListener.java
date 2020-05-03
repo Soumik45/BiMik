@@ -1,6 +1,6 @@
-
 package logic.events;
 
+import logic.DownData;
 import logic.ViewData;
 
 
@@ -9,7 +9,7 @@ public interface InputEventListener {
    
   //  ViewData onDownEvent(MoveEvent event);
 
-    public ViewData onDownEvent(MoveEvent event);
+    DownData onDownEvent(MoveEvent event);
 
     //ViewData onLeftEvent();
 
@@ -25,3 +25,4 @@ public interface InputEventListener {
     
     
 }
+
