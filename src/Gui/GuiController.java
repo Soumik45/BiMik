@@ -1,5 +1,5 @@
-package Gui;
 
+package gui;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -31,6 +31,7 @@ import logic.events.EventSource;
 import javafx.event.ActionEvent;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyEvent;
+import logic.DownData;
 import logic.events.EventType;
 import logic.events.InputEventListener;
 
@@ -116,8 +117,8 @@ public class GuiController implements Initializable
 	}
     
     private void moveDown(MoveEvent event) {
-		ViewData viewData = eventLister.onDownEvent(event);
-		refreshBrick(viewData);
+		DownData viewData = eventLister.onDownEvent(event);
+		refreshBrick(viewData.getViewData());
 	}
     public void refreshGameBackground(int[][] board) {
 		for (int i = 2; i < board.length; i++) {
