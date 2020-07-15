@@ -1,5 +1,8 @@
 package Gui;
 
+import javafx.scene.input.KeyCode;
+import logic.ClearRow;
+import logic.DownData;
 import logic.SimpleBoard;
 import logic.ViewData;
 import logic.events.EventSource;
@@ -27,46 +30,55 @@ public class GameController implements InputEventListener {
 	}
     
 
-   
+
     @Override
-    public ViewData onDownEvent(MoveEvent event) {
-        boolean canMove= board.moveBrickDown();
-                if(!canMove)
-                {
-                    board.mergeBrickToBackground();
-                    board.createNewBrick();
-                }else
-                {
-                    if(event.getEventSource()==EventSource.USER)
-                    {
-                        board.getScore().add(1);
-                    }
-                    
-                }
-                
+    public DownData onDownEvent(MoveEvent event) {
+       boolean canMove = board.moveBrickDown();
+		ClearRow clearRow = null;
+		if(!canMove) {
+			board.mergeBrickToBackground();
+			clearRow = board.clearRows();
+			if(clearRow.getLinesRemoved() > 0) {
+				board.getScore().add(clearRow.getScoreBonus());
+			}
+			if(board.createNewBrick()) {
+				viewController.gameOver();
+			}
+			
+			
+		}else {
+			if(event.getEventSource() == EventSource.USER) {
+				board.getScore().add(1);
+			}
+		}
 		
 		viewController.refreshGameBackground(board.getBoardMatrix());
-		return board.getViewData();
+		
+		return new DownData(clearRow, board.getViewData());
     }    
 
-    @Override
-    public ViewData onLeftEvent() {
-        
-        board.moveBrickLeft();
-        return board.getViewData();
-    }
+    //@Override
+    
 
     @Override
-    public ViewData onRightEvent() {
-        board.moveBrickRight();
-        return board.getViewData();
-        
-    }
+	public ViewData onLeftEvent() {
+		board.moveBrickLeft();
+		board.getScore().add(1);
+		return board.getViewData();
+	}
 
-    @Override
-    public ViewData onRotateEvent() {
-       board.rotateBrickLeft();
+	@Override
+	public ViewData onRightEvent() {
+		board.moveBrickRight();
+		board.getScore().add(1);
+		return board.getViewData();
+	}
+
+	@Override
+	public ViewData onRotateEvent() {
+		board.rotateBrickLeft();
 		
 		return board.getViewData();
-    }
+	}
+    
 }
