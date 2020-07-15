@@ -1,31 +1,28 @@
 
 package logic;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import Gui.GuiController;
+import Gui.GameController;
 
 public class MatrixOperation {
-    public static boolean intersects(int[][]matrix,int[][]brick, int x,int y)
-    {
-        int i,j;
-       // int targetY=0;
-        for(i=0;i<brick.length;i++)
-        {
-            for(j=0;j<brick[i].length;j++)
-            {
-                
-                //System.out.print(matrix[i][j]);
-                int targetX= x+i;
-               int  targetY=y+j;
-               if (brick[j][i] != 0 &&
-                       (outOfBounds(matrix,targetX, targetY) || matrix[targetY][targetX] != 0)) {
+    public static boolean intersects(int[][] matrix, int[][] brick, int x, int y) {
+		for (int i = 0; i < brick.length; i++) {
+			for (int j = 0; j < brick[i].length; j++) {
+				int targetX = x + i;
+				int targetY = y + j;
+				if (brick[j][i] != 0 && 
+						(outOfBounds(matrix, targetX, targetY) || matrix[targetY][targetX] != 0)) {
 					return true;
 				}
-            }
-           
-        }
-        
-        return false;
-        
-    }
+			}
+		}
+
+		return false;
+	}
     
     public static int[][] merge(int[][] filledFields, int[][] brick, int x, int y) {
 		int[][] copy = copy(filledFields);
@@ -63,4 +60,49 @@ public class MatrixOperation {
 		if(targetX>=0&&targetY<matrix.length&& targetX<matrix[targetY].length) return false;
                 else return true;
 	}
+
+    public static ClearRow checkRemoving(int[][] matrix) {
+        int f=1;
+       int[][] tmp = new int[matrix.length][matrix[0].length];
+		List<Integer> clearedRows = new ArrayList<>();
+		Deque<int[]> newRows = new ArrayDeque<>();
+		
+		for(int i = 0; i < matrix.length; i++) {
+			int[] tmpRow = new int[matrix[i].length];
+			boolean rowToClear = true;
+			for(int j = 0; j < matrix[0].length; j++) {
+				if(matrix[i][j] == 0) {
+					rowToClear = false;
+				}
+				tmpRow[j] = matrix[i][j];
+			}
+			
+			if(rowToClear) {
+				clearedRows.add(i);
+			}else {
+				newRows.add(tmpRow);
+			}
+		}
+                
+                for(int i = matrix.length - 1; i >= 0; i--) {
+			int[] row = newRows.pollLast();
+			if(row != null) {
+				tmp[i] = row;
+			}else {
+				break;
+			}
+		}
+                
+                
+               
+              //  DownData downData = eventLister.onDownEvent(event);
+                int scoreBonus = 50 * clearedRows.size()+ cnt;
+               
+		
+		return new ClearRow(clearedRows.size(), tmp, scoreBonus);
+    }
+    static int cnt=0;
+               public static void lol(int x){
+                   cnt=x;
+               }
 }
