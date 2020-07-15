@@ -3,7 +3,7 @@ package logic;
 import java.awt.Point;
 import logic.bricks.Brick;
 import logic.bricks.RandomBrickGenerator;
-
+import logic.MatrixOperation;
 public class SimpleBoard {
 
 	private final int width;
@@ -26,12 +26,15 @@ public class SimpleBoard {
 	}
 
 	public boolean createNewBrick() {
-                currentShape = 0;
+		currentShape = 0;
 		Brick currentBrick = brickGenerator.getBrick();
 		setBrick(currentBrick);
 		currentOffset = new Point(4, 0);
 
-		return true;
+		return MatrixOperation.intersects(currentGameMatrix,
+				getCurrentShape(), 
+				currentOffset.x, 
+				currentOffset.y);
 	}
 
         
@@ -132,4 +135,11 @@ public class SimpleBoard {
 		this.currentShape = currentShape;
 	}
 
+    public ClearRow clearRows() {
+        ClearRow clearRow =  MatrixOperation.checkRemoving(currentGameMatrix);
+        currentGameMatrix = clearRow.getNextMatrix();
+        return clearRow;
+    }
+
+   
 }
