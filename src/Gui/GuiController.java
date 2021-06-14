@@ -253,6 +253,7 @@ public class GuiController implements Initializable
                 
                 
                 pauseButton.selectedProperty().bindBidirectional(paused);
+		
 		pauseButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
                     @Override
                     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -283,10 +284,11 @@ public class GuiController implements Initializable
         
     }
     public void gameOver() {
+		
 		timeLine.stop();
 		gameOverPanel.setVisible(true);
 		isGameOver.setValue(Boolean.TRUE);
-		System.out.println("Game Over!");
+		System.out.println("Game Over");
 	}
 	
 }
