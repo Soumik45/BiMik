@@ -41,7 +41,8 @@ public class GameController implements InputEventListener {
 			if(clearRow.getLinesRemoved() > 0) {
 				board.getScore().add(clearRow.getScoreBonus());
 			}
-			if(board.createNewBrick()) {
+			
+			if(board.createNewBrick() ) {
 				viewController.gameOver();
 			}
 			
@@ -54,12 +55,11 @@ public class GameController implements InputEventListener {
 		
 		viewController.refreshGameBackground(board.getBoardMatrix());
 		
-		return new DownData(clearRow, board.getViewData());
+		return new DownData(clearRow,board.getViewData());
     }    
 
     //@Override
-    
-
+   
     @Override
 	public ViewData onLeftEvent() {
 		board.moveBrickLeft();
