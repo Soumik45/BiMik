@@ -9,6 +9,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -43,6 +44,7 @@ import logic.events.InputEventListener;
 
 public class GuiController implements Initializable
 {
+    
    public static int ami=0; 
     private static final int BRICK_SIZE = 20;
     Timeline timeLine;
@@ -64,6 +66,10 @@ public class GuiController implements Initializable
     
     @FXML
 	private Text scoreValue;
+    
+    @FXML
+	private Text hs;
+    public Text sv;
     
      @FXML
         private GridPane nextBrick;
@@ -166,6 +172,22 @@ public class GuiController implements Initializable
 	}
     public void bindScore(IntegerProperty integerProperty) {
 		scoreValue.textProperty().bind(integerProperty.asString());
+              // IntegerProperty intProperty = new SimpleIntegerProperty(x);
+               //  scoreValue.textProperty().bind(intProperty.asString());
+                /*sv= scoreValue;
+                System.out.println(sv);
+*/
+               //  System.out.println(integerProperty);
+	}
+    
+     public void bindScore2(int x) {
+		
+                IntegerProperty intProperty = new SimpleIntegerProperty(x);
+                 hs.textProperty().bind(intProperty.asString());
+                /*sv= scoreValue;
+                System.out.println(sv);
+*/
+               //  System.out.println(integerProperty);
 	}
     
     public Paint getFillColor(int i) {
@@ -253,7 +275,6 @@ public class GuiController implements Initializable
                 
                 
                 pauseButton.selectedProperty().bindBidirectional(paused);
-		
 		pauseButton.selectedProperty().addListener(new ChangeListener<Boolean>() {
                     @Override
                     public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -284,11 +305,10 @@ public class GuiController implements Initializable
         
     }
     public void gameOver() {
-		
 		timeLine.stop();
 		gameOverPanel.setVisible(true);
 		isGameOver.setValue(Boolean.TRUE);
-		System.out.println("Game Over");
+		System.out.println("Game Over!");
 	}
 	
 }
