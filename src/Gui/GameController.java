@@ -6,6 +6,7 @@ import logic.DownData;
 import logic.SimpleBoard;
 import logic.ViewData;
 import logic.events.EventSource;
+import logic.FileDeo;
 
 import logic.events.InputEventListener;
 import logic.events.MoveEvent;
@@ -16,6 +17,7 @@ public class GameController implements InputEventListener {
     
     
     private SimpleBoard board = new SimpleBoard(25, 10);
+   
     
     private final GuiController viewController;
   
@@ -27,6 +29,10 @@ public class GameController implements InputEventListener {
 		board.createNewBrick();
 		this.viewController.initGameView(board.getBoardMatrix(),board.getViewData());
 		this.viewController.bindScore(board.getScore().scoreProperty());
+                int x=board.gethScore();
+               
+                this.viewController.bindScore2(x);
+              // int s= this.viewController.bindScore(board.getScore().scoreProperty());
 	}
     
 
@@ -41,8 +47,7 @@ public class GameController implements InputEventListener {
 			if(clearRow.getLinesRemoved() > 0) {
 				board.getScore().add(clearRow.getScoreBonus());
 			}
-			
-			if(board.createNewBrick() ) {
+			if(board.createNewBrick()) {
 				viewController.gameOver();
 			}
 			
@@ -55,11 +60,12 @@ public class GameController implements InputEventListener {
 		
 		viewController.refreshGameBackground(board.getBoardMatrix());
 		
-		return new DownData(clearRow,board.getViewData());
+		return new DownData(clearRow, board.getViewData());
     }    
 
     //@Override
-   
+    
+
     @Override
 	public ViewData onLeftEvent() {
 		board.moveBrickLeft();
