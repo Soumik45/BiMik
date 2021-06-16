@@ -4,6 +4,8 @@ import java.awt.Point;
 import logic.bricks.Brick;
 import logic.bricks.RandomBrickGenerator;
 import logic.MatrixOperation;
+import logic.FileDeo;
+
 public class SimpleBoard {
 
 	private final int width;
@@ -13,7 +15,8 @@ public class SimpleBoard {
 	private Brick brick;
 	private int currentShape = 0;
 	private Point currentOffset;
-        private Score score;
+        private final Score score;
+         private  Score score2;
 
 
 	public SimpleBoard(int width, int height) {
@@ -22,6 +25,7 @@ public class SimpleBoard {
 		currentGameMatrix = new int[width][height];
 		brickGenerator = new RandomBrickGenerator();
                 score = new Score();
+                 score2 = new Score();
 		
 	}
 
@@ -103,6 +107,11 @@ public class SimpleBoard {
 		return score;
 	}
         
+        public int gethScore() {
+           int x = score2.deo();
+            System.out.println(x);
+                return x;
+	}
 
 	public int[][] getBoardMatrix() {
 		return currentGameMatrix;
